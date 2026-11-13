@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How much do I need to retire? | Pinecone by Stanford</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0c3441;
+    --green: #14614f;
+    --mist: #eef2f1;
+    --paper: #ffffff;
+    --sky: #8fbdd4;
+    --muted: color-mix(in srgb, var(--ink) 68%, var(--paper));
+    --line: color-mix(in srgb, var(--ink) 12%, var(--paper));
+    --green-soft: color-mix(in srgb, var(--green) 9%, var(--paper));
+    --leaf: color-mix(in srgb, var(--green) 45%, var(--sky));
+    --serif: "Source Serif 4", Georgia, serif;
+    --sans: "Source Sans 3", system-ui, sans-serif;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body { margin: 0; font-family: var(--sans); color: var(--ink); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: var(--green); font-weight: 600; text-underline-offset: 3px; }
+  h1, h2, h3 { font-family: var(--serif); line-height: 1.18; margin: 0; text-wrap: balance; }
+  h1 em { font-style: normal; }
+  p { margin: 0; text-wrap: pretty; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .topbar { display: flex; align-items: baseline; gap: 8px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .topbar b { font-family: var(--serif); font-size: 19px; }
+  .topbar span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+  .layout { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; display: flex; justify-content: center; }
+  article { flex: 1; min-width: 0; max-width: 680px; display: flex; flex-direction: column; gap: 20px; }
+
+  h1 { font-size: clamp(32px, 6vw, 44px); }
+  .lede { font-size: 18px; }
+  .pill { font-size: 12px; font-weight: 700; background: var(--green); color: var(--paper); border-radius: 999px; padding: 2px 10px; white-space: nowrap; line-height: 1.5; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Journey visual */
+  .journey { display: flex; flex-direction: column; gap: 2px; margin: 4px 0 0; }
+  .plot { position: relative; }
+  .plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .jcurve { fill: none; stroke: var(--green); stroke-width: 2.5; stroke-linecap: round; }
+  .area-up { fill: var(--green-soft); }
+  .area-down { fill: var(--mist); }
+  .retire-line { stroke: var(--muted); stroke-width: 1.25; stroke-dasharray: 3 4; }
+  .baseline { stroke: var(--line); stroke-width: 1.5; }
+  .back { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .leader { stroke: var(--green); stroke-width: 1.25; stroke-dasharray: 2 3; }
+  .ann { position: absolute; display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--ink); font-weight: 400; border-radius: 10px; padding: 6px 8px; transition: background .15s; }
+  .ann:hover { background: var(--green-soft); }
+  .ann:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+  .ann .row { display: flex; align-items: center; gap: 8px; }
+  .ann .t { font-weight: 700; font-size: 16px; white-space: nowrap; }
+  .ann .s { font-size: 14px; color: var(--muted); white-space: nowrap; }
+  .ann-1 { left: 58.82%; bottom: 68.2%; transform: translateX(-50%); align-items: center; text-align: center; }
+  .ann-2 { left: 2%; bottom: 34.6%; }
+  .back-label { position: absolute; left: 38%; top: 35.5%; font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .badge { position: absolute; width: 24px; height: 24px; border-radius: 999px; background: var(--green); color: var(--paper); font-size: 13px; font-weight: 700; display: none; align-items: center; justify-content: center; transform: translate(-50%, -50%); text-decoration: none; border: 2px solid var(--paper); }
+  .badge-1 { left: 58.82%; top: 35.71%; }
+  .badge-2 { left: 25.44%; top: 89.29%; }
+  .phases { display: flex; font-size: 14px; font-weight: 600; line-height: 1.4; }
+  .phases span:first-child { flex: 0 0 52.94%; margin-left: 5.88%; text-align: center; color: var(--green); }
+  .phases span:last-child { flex: 0 0 35.29%; text-align: center; color: var(--muted); }
+  .step-list { list-style: none; margin: 4px 0 0; padding: 0; display: none; flex-direction: column; gap: 12px; }
+  .step-list a { display: flex; gap: 12px; align-items: flex-start; text-decoration: none; color: var(--ink); font-weight: 400; }
+  .step-list .n { flex: none; width: 24px; height: 24px; border-radius: 999px; background: var(--green); color: var(--paper); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .step-list .t { font-weight: 700; display: block; }
+  .step-list .s { font-size: 15px; color: var(--muted); }
+  .step-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .step-meta .how { font-size: 13px; padding: 2px 10px; }
+  @media (max-width: 560px) {
+    .ann, .back-label, .back { display: none; }
+    .badge { display: flex; }
+    .step-list { display: flex; }
+  }
+  .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.1s ease-out forwards; }
+  .draw-2 { animation-delay: .9s; animation-duration: .9s; }
+  .fade { opacity: 0; animation: fade .5s ease-out forwards; }
+  .d1 { animation-delay: .9s; } .d2 { animation-delay: 1.5s; } .d3 { animation-delay: 1.9s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes fade { to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .draw, .fade { animation: none; opacity: 1; stroke-dashoffset: 0; } }
+  .how { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; font-size: 14px; color: var(--green); background: var(--green-soft); border-radius: 999px; padding: 6px 14px; font-weight: 600; }
+
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--green); }
+  .step-head { display: flex; flex-direction: column; gap: 6px; padding-top: 28px; }
+  .step-head h2 { font-size: 30px; }
+  .step-box { margin-top: 28px; gap: 10px; }
+  .step-box .step-n { color: var(--green); }
+  .pin-row { margin: 28px 0 10px; }
+  .pin-row + .step-box { margin-top: 0; padding-top: 0; }
+  @media (max-width: 560px) { .step-head h2 { font-size: 26px; } }
+  .q { display: flex; flex-direction: column; gap: 14px; padding-top: 18px; }
+  .q h3 { font-size: 22px; }
+  .bullets { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .bullets li::marker { color: var(--green); }
+
+  /* Answer card */
+  .answer { background: transparent; border: 0; border-left: 3px solid var(--green); padding: 2px 0 2px 16px; display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .sentence { font-size: 17px; line-height: 1.7; }
+
+  /* Recap calculator */
+  .calc { display: flex; flex-direction: column; margin-top: 6px; }
+  .calc-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .calc-row label, .calc-label { font-weight: 600; font-size: 16px; }
+  .calc-val { display: flex; align-items: baseline; gap: 10px; font-size: 16px; }
+  .calc-val a { font-size: 14px; }
+  .calc-sub { font-size: 14px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .calc-sub b { color: var(--ink); }
+  .calc > :last-child { border-bottom: 0; padding-bottom: 0; }
+.calc-acc summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 0; cursor: pointer; list-style: none; }
+.calc-acc summary::-webkit-details-marker { display: none; }
+.calc-acc summary .calc-val { align-items: center; }
+.calc-acc summary svg { color: var(--green); transition: transform .2s; }
+.calc-acc[open] summary svg { transform: rotate(180deg); }
+.calc-acc summary:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; border-radius: 4px; }
+.calc-acc-body { display: flex; flex-direction: column; padding-top: 12px; }
+.calc-acc-body .chips { padding-bottom: 6px; }
+.calc-acc-body .calc-row:last-child { border-bottom: 0; }
+.calc-acc-body .calc-row label { font-weight: 500; }
+  .stepper { display: flex; flex: none; align-items: center; gap: 8px; }
+  .stepper button { width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--green); font: inherit; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; transition: background .15s, border-color .15s; }
+  .stepper button:hover { background: var(--green-soft); border-color: var(--green); }
+  .stepper button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .stepper-field { display: flex; align-items: baseline; justify-content: flex-end; gap: 3px; width: 96px; padding: 2px 2px 3px; border-bottom: 2px solid var(--line); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; transition: border-color .15s; }
+  .stepper-field:hover { border-color: color-mix(in srgb, var(--green) 45%, var(--paper)); }
+  .stepper-field:focus-within { border-color: var(--green); }
+  .stepper-field input { font: inherit; color: var(--ink); border: 0; background: transparent; padding: 0; min-width: 0; width: 100%; text-align: right; outline: none; }
+  .stepper .unit { color: var(--muted); font-weight: 500; font-size: 14px; }
+  @media (max-width: 480px) {
+    .calc-row label, .calc-label { font-size: 15px; }
+    .stepper { gap: 6px; }
+    .stepper-field { width: 80px; }
+  }
+  .field { display: inline-flex; align-items: baseline; padding: 0 2px; border-bottom: 2px solid var(--green); font-weight: 700; color: var(--green); transition: color .15s, background .15s; cursor: text; }
+  .field:focus-within { background: var(--paper); border-radius: 4px 4px 0 0; }
+  .answer:not(.mine) .field { color: color-mix(in srgb, var(--green) 55%, var(--paper)); border-bottom-style: dashed; }
+  .answer:not(.mine) .field:focus-within { color: var(--green); border-bottom-style: solid; }
+  .field input { font: inherit; color: inherit; border: 0; background: transparent; padding: 0; width: 4ch; min-width: 2ch; outline: none; font-variant-numeric: tabular-nums; }
+  .echo { font-size: 14px; color: color-mix(in srgb, var(--ink) 75%, var(--paper)); }
+  .echo b { color: var(--ink); }
+  .echo[hidden] { display: none; }
+  .answer .add { font-size: 14px; text-align: left; align-items: flex-start; }
+  .answer .add svg { margin-top: 3px; flex: none; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font: inherit; font-size: 14px; font-weight: 600; color: var(--green); background: var(--paper); border: 1px solid color-mix(in srgb, var(--green) 30%, var(--paper)); border-radius: 999px; padding: 5px 12px; cursor: pointer; transition: background .15s, color .15s; }
+  .chip:hover { background: var(--green-soft); }
+  .chip[aria-pressed="true"] { background: var(--green); color: var(--paper); border-color: var(--green); }
+  .feeds { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 12px; font-size: 15px; color: var(--muted); }
+  .feeds svg { flex: none; color: var(--green); }
+  .feeds b { color: var(--ink); font-size: 17px; }
+  .add { font: inherit; font-size: 15px; font-weight: 600; color: var(--green); background: none; border: 0; padding: 0; cursor: pointer; align-self: flex-start; display: inline-flex; gap: 6px; align-items: center; }
+  .add:hover { text-decoration: underline; }
+  .sub[hidden] { display: none; }
+  .group-label { font-size: 14px; font-weight: 600; color: var(--muted); }
+  .match-block { display: flex; flex-direction: column; gap: 10px; }
+  .match-block .add { font-size: 14px; }
+  .echo .tip { display: block; margin-top: 4px; }
+  .group-label .hint { font-weight: 400; }
+  .emp-detail { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; padding-top: 14px; border-top: 1px solid color-mix(in srgb, var(--green) 18%, transparent); }
+  .emp-detail .sentence { line-height: 1.6; }
+  .match-block { display: flex; flex-direction: column; gap: 6px; }
+  .presets { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 14px; row-gap: 4px; font-size: 13px; }
+  .presets-label { color: var(--muted); }
+  .preset { font: inherit; font-size: 13px; color: var(--green); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--green) 35%, transparent); text-underline-offset: 3px; }
+  .preset:hover { text-decoration-color: var(--green); }
+  .preset[aria-pressed="true"] { font-weight: 700; text-decoration: none; }
+  .preset-add { font-weight: 600; text-decoration: none; }
+ .acc-presets { padding: 12px 0 14px; border-bottom: 1px solid var(--line); }
+ .acc-presets[hidden] { display: none; }
+  #match-echo { font-size: 15px; }
+  #match-echo .echo-amt { font-size: 17px; color: var(--green); }
+  #match-echo .echo-split { color: var(--muted); font-size: 14px; }
+  .seg { display: inline-flex; background: var(--paper); border-radius: 999px; padding: 4px; gap: 4px; align-self: flex-start; }
+  .seg button { font: inherit; font-size: 15px; font-weight: 600; border: 0; background: transparent; color: var(--ink); padding: 6px 18px; border-radius: 999px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--green); color: var(--paper); }
+
+  /* Result */
+  .result { background: var(--ink); color: var(--paper); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .result .eyebrow { color: var(--sky); }
+  .big { font-family: var(--serif); font-size: clamp(40px, 9vw, 56px); line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .big small { font-size: .45em; font-family: var(--sans); font-weight: 600; opacity: .8; }
+  .result p { color: color-mix(in srgb, var(--paper) 82%, var(--ink)); font-size: 16px; }
+  .result b { color: var(--paper); }
+  .recap { display: flex; flex-direction: column; gap: 8px; }
+  .recap-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+  .recap-line { font-family: var(--serif); font-weight: 500; font-size: 18px; line-height: 1.9; }
+  .recap-line .token { padding: 0 6px; }
+
+  .proto-switch { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; font-size: 13px; color: var(--muted); border: 1px dashed var(--line); border-radius: 12px; padding: 8px 10px; margin-top: 8px; }
+  .proto-switch .seg { background: var(--mist); }
+  .proto-switch .seg button { font-size: 13px; padding: 4px 12px; }
+  [data-variant][hidden], [data-needs-compare][hidden] { display: none !important; }
+
+  .card-b { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+  .card-b-recap { padding: 22px 24px; border-bottom: 1px solid var(--line); }
+  .card-b-top { padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; }
+  .card-b-top .big { color: var(--green); }
+  .card-b-top p { font-size: 16px; color: var(--muted); }
+  .card-b-compare { background: var(--mist); border-top: 1px solid var(--line); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .card-b-compare p { font-size: 15px; color: var(--muted); }
+  .card-b-compare { gap: 8px; }
+  .card-b-compare p { font-size: 16px; color: var(--ink); }
+  .card-b-compare p b { color: var(--green); }
+  .card-b-top .big small { color: var(--muted); opacity: 1; }
+  .card-b .split div { background: var(--paper); border: 1px solid var(--line); }
+  .card-b .split span { color: var(--muted); }
+  .card-b .split b { color: var(--green); }
+  .card-b [hidden] { display: none; }
+  .card-b .card-b-section { border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 20px 24px; }
+  .card-b .card-b-scen { background: var(--mist); }
+  .card-b .card-b-scen .chip { background: var(--paper); }
+  .card-b .card-b-scen .chip:hover { background: var(--green-soft); }
+  @media (max-width: 560px) {
+    .card-b { border-radius: 14px; }
+    .card-b-recap, .card-b-top, .card-b-compare, .card-b .card-b-section { padding: 14px 16px; }
+    .card-b-recap h3 { font-size: 19px; }
+    .card-b-top { gap: 6px; }
+    .card-b-top p, .card-b-compare p { font-size: 15px; line-height: 1.5; }
+    .card-b .big { font-size: 38px; }
+    .calc { margin-top: 2px; }
+    .calc-row { padding: 6px 0; gap: 8px; }
+    .calc-row label, .calc-label { font-size: 14px; line-height: 1.3; }
+    .calc-val { font-size: 15px; gap: 8px; }
+    .calc-acc summary { padding-top: 8px; }
+    .calc-acc-body { padding-top: 8px; }
+    .acc-presets { padding: 8px 0 10px; }
+    .stepper { gap: 4px; }
+    .stepper button { width: 26px; height: 26px; font-size: 15px; }
+    .stepper-field { width: 76px; font-size: 16px; }
+    .split { gap: 8px; }
+    .split div { padding: 8px 12px; }
+    .split b { font-size: 18px; }
+    .chips { gap: 6px; }
+    .chip { font-size: 13px; padding: 4px 10px; }
+    .legend { gap: 4px 12px; font-size: 13px; }
+  }
+  .label-tip { display: inline-flex; align-items: center; gap: 6px; }
+  .tip-wrap { position: relative; display: inline-flex; }
+  .tip-btn { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--muted); background: transparent; color: var(--muted); font: 700 11px/1 var(--sans); font-style: italic; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+  .tip-btn:hover, .tip-btn[aria-expanded="true"] { border-color: var(--green); color: var(--green); }
+  .tip-btn:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .tip-bubble { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); width: 240px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 400; line-height: 1.45; padding: 10px 12px; border-radius: 10px; opacity: 0; visibility: hidden; transition: opacity .15s; z-index: 5; pointer-events: none; }
+  .tip-wrap:hover .tip-bubble, .tip-btn:focus-visible + .tip-bubble, .tip-btn[aria-expanded="true"] + .tip-bubble { opacity: 1; visibility: visible; }
+  @media (max-width: 520px) { .tip-bubble { left: 0; transform: none; width: 220px; } }
+
+  .card-c { border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--line); }
+  .card-c-head { background: var(--ink); color: var(--paper); padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; }
+  .card-c-head .eyebrow { color: var(--sky); }
+  .card-c-facts { margin: 0; display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  .card-c-facts div { flex: 1 1 120px; padding: 14px 24px; display: flex; flex-direction: column; gap: 2px; }
+  .card-c-facts div + div { border-left: 1px solid var(--line); }
+  .card-c-facts dt { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .card-c-facts dd { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 700; }
+  .card-c-note { padding: 14px 24px 0; font-size: 15px; color: var(--muted); }
+  .card-c-warn { margin: 14px 24px 20px; background: var(--green-soft); border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+  .card-c-warn svg { flex: none; color: var(--green); margin-top: 2px; }
+  .card-c-warn p { margin: 0; }
+  .card-c-note:last-child { padding-bottom: 20px; }
+  .recap-line b { font-weight: 700; }
+  .token { display: inline-block; font-variant-numeric: tabular-nums; color: var(--green); font-weight: 700; background: var(--green-soft); border-bottom: 2px solid var(--green); border-radius: 6px 6px 0 0; padding: 0 10px; line-height: 1.35; text-decoration: none; transition: background .15s; }
+  .token:hover { background: color-mix(in srgb, var(--green) 16%, var(--paper)); }
+  .yours { color: var(--paper); font-weight: 700; border-bottom: 2px solid var(--sky); padding: 0 1px; font-variant-numeric: tabular-nums; }
+  .compare { border-top: 1px solid color-mix(in srgb, var(--paper) 18%, var(--ink)); padding-top: 12px; }
+  .split { display: flex; gap: 10px; flex-wrap: wrap; }
+  .split div { flex: 1 1 140px; background: color-mix(in srgb, var(--paper) 8%, var(--ink)); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; }
+  .split span { font-size: 13px; color: var(--sky); }
+  .split b { font-size: 20px; }
+
+  details.math { border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+  details.math summary { cursor: pointer; padding: 14px 18px; font-weight: 700; color: var(--green); font-size: 15px; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  details.math summary::-webkit-details-marker { display: none; }
+  details.math summary svg { transition: transform .2s; }
+  details.math[open] summary svg { transform: rotate(180deg); }
+  details.math[open] summary { border-bottom: 1px solid var(--line); }
+  .math-body { padding: 18px; display: flex; flex-direction: column; gap: 16px; font-size: 15px; }
+  .math-body h4 { margin: 0; font-size: 15px; font-weight: 700; }
+  .formula { background: var(--mist); border: 1px solid var(--line); border-radius: 10px; padding: 22px 16px; display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 18px; white-space: nowrap; overflow-x: auto; font-variant-numeric: tabular-nums; }
+  .formula i { font-style: italic; }
+  .formula .p { font-size: 2.1em; font-weight: 300; line-height: 1; }
+  .frac { display: inline-flex; flex-direction: column; text-align: center; margin: 0 2px; }
+  .frac > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 6px 2px; }
+  .frac > span:last-child { padding-top: 2px; }
+  .vars, .math-body ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-variant-numeric: tabular-nums; }
+  .vars li::marker, .math-body ol li::marker { color: var(--green); }
+
+  .chart-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .chart-card svg { width: 100%; height: auto; display: block; }
+  .chart-card text { font-family: var(--sans); font-size: 11px; fill: var(--muted); }
+  .chart-note { font-size: 14px; color: var(--muted); }
+  details.future { border-top: 1px solid var(--line); padding-top: 10px; }
+  details.future summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 15px; color: var(--green); }
+  details.future summary::-webkit-details-marker { display: none; }
+  details.future summary svg { transition: transform .2s; width: 18px; height: 18px; flex: none; }
+  details.future[open] summary svg { transform: rotate(180deg); }
+  .future-body { display: flex; flex-direction: column; gap: 12px; padding-top: 10px; font-size: 15px; }
+  .future-body p { margin: 0; }
+  .future-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .future-table th { text-align: left; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .future-table td { padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .future-table th:last-child, .future-table td:last-child { text-align: right; font-weight: 700; }
+
+  .scen { display: flex; flex-direction: column; gap: 10px; }
+  .concepts { background: var(--green-soft); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .concepts h3 { font-size: 18px; }
+  .concepts ul { margin: 0; padding-left: 20px; }
+  .next { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--ink); font-weight: 400; }
+  .next h3 { font-size: 20px; }
+  .next:hover h3 { text-decoration: underline; }
+
+  .bar { width: 64px; height: 4px; background: color-mix(in srgb, var(--paper) 18%, var(--ink)); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+  .bar i { display: block; height: 100%; background: var(--sky); width: 0; transition: width .4s; }
+
+  .js .reveal { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  :focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 45%, transparent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<header class="topbar"><b>Pinecone</b><span>by Stanford</span></header>
+
+<div class="layout">
+<article>
+  <h1>How much do I need to retire, and <em>how do I get there?</em></h1>
+  <p class="lede">The right amount is different for everyone. These two steps help you find your number and plan how to reach it.</p>
+  <figure class="journey" aria-labelledby="journey-desc">
+    <p id="journey-desc" class="sr-only">Your savings grow from today until you retire, peak on the day you retire, then shrink as you spend them in retirement. Step 1 finds the peak. Step 2 works backward from it to what you save each year.</p>
+    <div class="plot">
+      <svg viewBox="0 0 680 280" aria-hidden="true">
+        <defs>
+          <marker id="j-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)" />
+          </marker>
+        </defs>
+        <path class="area-up fade" d="M40,268 C200,262 320,210 400,100 L400,270 L40,270 Z" />
+        <path class="area-down fade d1" d="M400,100 C470,120 580,190 640,270 L400,270 Z" />
+        <line class="baseline" x1="40" y1="270" x2="640" y2="270" />
+        <line class="retire-line fade d1" x1="400" y1="108" x2="400" y2="270" />
+        <path class="jcurve draw" pathLength="1" d="M40,268 C200,262 320,210 400,100" />
+        <path class="jcurve draw draw-2" pathLength="1" d="M400,100 C470,120 580,190 640,270" />
+        <circle class="fade d1" cx="400" cy="100" r="7" fill="var(--green)" stroke="var(--paper)" stroke-width="2.5" />
+        <path class="back fade d2" d="M386,98 C340,122 300,140 246,152" marker-end="url(#j-arrow)" />
+      </svg>
+      <a class="ann ann-1 fade d1" href="#step-one">
+        <span class="row"><span class="pill">Step 1</span><span class="t">Find your target number</span></span>
+        <span class="s">what you&rsquo;ll need the day you retire</span>
+      </a>
+      <span class="back-label fade d2" aria-hidden="true">then work back</span>
+      <a class="ann ann-2 fade d3" href="#step-two">
+        <span class="row"><span class="pill">Step 2</span><span class="t">Plan how to get there</span></span>
+        <span class="s">what to save each year until then</span>
+      </a>
+      <a class="badge badge-1 fade d1" href="#step-one" aria-label="Step 1: Find your target number">1</a>
+      <a class="badge badge-2 fade d3" href="#step-two" aria-label="Step 2: Plan how to get there">2</a>
+    </div>
+    <div class="phases" aria-hidden="true">
+      <span>Saving while you work</span>
+      <span>Spending in retirement</span>
+    </div>
+    <ol class="step-list">
+      <li><a href="#step-one"><span class="n">1</span><span><span class="t">Find your target number</span><span class="s">what you&rsquo;ll need the day you retire</span></span></a></li>
+      <li><a href="#step-two"><span class="n">2</span><span><span class="t">Then work back to a plan</span><span class="s">what to save each year until then</span></span></a></li>
+    </ol>
+  </figure>
+
+  <!-- STEP ONE -->
+  <div class="pin-row">
+    <span class="how">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      Answer as you read
+    </span>
+  </div>
+  <section id="step-one" class="step-head step-box">
+    <h2><span class="step-n">Step One:</span> Find your target number</h2>
+    <p>Estimating the amount you need can be difficult, especially if retirement is decades away. Start by asking yourself a few questions:</p>
+  </section>
+
+  <section class="q" id="q-spend">
+    <h3>How much do you expect to spend in retirement?</h3>
+    <p>Think about how much you would need each month to live comfortably in retirement. For example, if $5,000 a month ($60,000 a year) would cover your needs and wants, that&rsquo;s your starting point.</p>
+    <p>Not sure? Start with what you spend now. Your estimate will get clearer as retirement gets closer.</p>
+    <p>Use <strong>today&rsquo;s prices</strong>, even though prices will be higher by the time you retire. The rise in prices over time is called inflation, and it&rsquo;s accounted for later in this step so you don&rsquo;t have to guess future prices.</p>
+
+    <div class="answer reveal" id="a-calculator" data-card="spend" data-keys="monthly">
+      <p class="sentence">I&rsquo;d spend about <label class="field">$<input data-bind="monthly" data-type="money" inputmode="numeric" aria-label="Monthly spending in retirement"></label> a month.</p>
+      <div class="echo" aria-live="polite">
+        <span>That&rsquo;s <b class="num" data-out="yearlySpend"></b> a year</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="q-income">
+    <h3>Will you have income in retirement?</h3>
+    <p>If you&rsquo;ll have income in retirement, like from a pension or Social Security, the amount of savings you need to cover your expected spending will be less.</p>
+
+    <div class="answer reveal" data-card="income" data-keys="other">
+      <button class="add" id="other-toggle" aria-expanded="false" aria-controls="other-sub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>I&rsquo;ll have other income, like a pension or Social Security</span>
+      </button>
+      <p class="sentence sub" id="other-sub" hidden>Other income will cover <label class="field">$<input data-bind="other" data-type="money" inputmode="numeric" aria-label="Other monthly income in retirement"></label> a month.</p>
+      <div class="echo" aria-live="polite">
+        <span data-out="needEcho"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="q-length">
+    <h3>How long do you expect to be retired?</h3>
+    <p>Many people plan to retire at 65, and Americans who reach 65 can expect to live about 20 more years on average, according to the <a href="https://www.cdc.gov/nchs/products/databriefs/db548.htm" target="_blank" rel="noopener">CDC</a>. Many live longer, so planning for longer periods, 25 or 30 years, is reasonable.</p>
+    <p>If you&rsquo;d like to retire sooner, or expect to live longer, you&rsquo;ll have to cover more years.</p>
+
+    <div class="answer reveal" data-card="length" data-keys="retireAge,years">
+      <p class="sentence">I&rsquo;d like to retire at <label class="field"><input id="c1-retire" data-type="int" inputmode="numeric" aria-label="Retirement age"></label> and plan for my savings to last until <label class="field"><input id="c1-liveto" data-type="int" inputmode="numeric" aria-label="Age savings should last until"></label>.</p>
+    </div>
+  </section>
+
+  <section class="q" id="q-grow">
+    <h3>How much do you expect your investments to grow in retirement?</h3>
+    <p>Your expected return is an estimate of how much your savings will grow each year, and it depends on what you invest in.</p>
+    <p>In retirement, many people shift toward safer investments, like bonds, which typically come with lower returns. <strong>A 4% return, before inflation, is a common assumption.</strong></p>
+    <p>The Federal Reserve aims for <a href="https://www.federalreserve.gov/economy-at-a-glance-inflation-pce.htm" target="_blank" rel="noopener">2%</a> annual inflation, though it has been higher in recent years. At 2%, prices double about every 35 years, so $5,000 a month in 35 years would only buy what $2,500 buys today.</p>
+    <p>Plan in today&rsquo;s dollars by <strong>subtracting expected inflation from your expected return.</strong></p>
+
+    <div class="answer reveal" data-card="growth" data-keys="retReturn,inflation">
+      <p class="sentence">I expect my savings to grow <label class="field"><input data-bind="retReturn" data-type="pct" inputmode="decimal" aria-label="Expected return in retirement, percent">%</label> a year, and I&rsquo;ll plan for <label class="field"><input data-bind="inflation" data-type="pct" inputmode="decimal" aria-label="Expected inflation, percent">%</label> inflation a year.</p>
+      <div class="echo" aria-live="polite">
+        <span><span data-out="retReturnTxt"></span> growth &minus; <span data-out="inflTxt"></span> inflation = <b class="num" data-out="realRetTxt"></b> in today&rsquo;s dollars</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="target">
+    <div class="card-b" aria-live="polite">
+      <div class="recap card-b-recap">
+        <div class="recap-head"><h3>Putting it all together</h3></div>
+        <div class="calc">
+          <div class="calc-row"><label for="c-monthly">Monthly spending</label><div class="stepper"><button type="button" data-step="monthly" data-by="-250" aria-label="Decrease monthly spending">&minus;</button><span class="stepper-field"><span class="unit">$</span><input id="c-monthly" data-bind="monthly" data-type="money" inputmode="numeric"></span><button type="button" data-step="monthly" data-by="250" aria-label="Increase monthly spending">+</button></div></div>
+          <div class="calc-row"><span class="label-tip"><label for="c-other">Other monthly income</label><span class="tip-wrap"><button type="button" class="tip-btn" aria-label="What counts as other monthly income?" aria-describedby="tip-other" aria-expanded="false">i</button><span class="tip-bubble" role="tooltip" id="tip-other">Income you expect to get each month in retirement, from sources like a pension or Social Security.</span></span></span><div class="stepper"><button type="button" data-step="other" data-by="-250" aria-label="Decrease other income">&minus;</button><span class="stepper-field"><span class="unit">$</span><input id="c-other" data-bind="other" data-type="money" inputmode="numeric"></span><button type="button" data-step="other" data-by="250" aria-label="Increase other income">+</button></div></div>
+          <div class="calc-row"><label for="c-years">Years in retirement</label><div class="stepper"><button type="button" data-step="years" data-by="-1" aria-label="Fewer years">&minus;</button><span class="stepper-field"><input id="c-years" data-bind="years" data-type="int" inputmode="numeric"><span class="unit">yrs</span></span><button type="button" data-step="years" data-by="1" aria-label="More years">+</button></div></div>
+          <div class="calc-row"><label for="c-ret">Return in retirement</label><div class="stepper"><button type="button" data-step="retReturn" data-by="-0.5" aria-label="Lower return">&minus;</button><span class="stepper-field"><input id="c-ret" data-bind="retReturn" data-type="pct" inputmode="decimal"><span class="unit">%</span></span><button type="button" data-step="retReturn" data-by="0.5" aria-label="Higher return">+</button></div></div>
+          <div class="calc-row"><label for="c-infl">Inflation</label><div class="stepper"><button type="button" data-step="inflation" data-by="-0.5" aria-label="Lower inflation">&minus;</button><span class="stepper-field"><input id="c-infl" data-bind="inflation" data-type="pct" inputmode="decimal"><span class="unit">%</span></span><button type="button" data-step="inflation" data-by="0.5" aria-label="Higher inflation">+</button></div></div>
+        </div>
+      </div>
+      <div class="card-b-top">
+        <span class="eyebrow">Your target number</span>
+        <div class="big" data-tween="target"></div>
+        <p data-out="targetLine"></p>
+      </div>
+      <div class="card-b-compare" data-needs-compare>
+        <span class="eyebrow">Why inflation matters</span>
+        <p data-out="compareLine"></p>
+      </div>
+    </div>
+
+    <details class="math">
+      <summary>The math behind the number: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="math-body">
+        <div class="formula" aria-label="PV equals C over r, times 1 minus 1 over 1 plus r to the power T"><i>PV</i> = <span class="frac"><i>C</i><i>r</i></span><span class="p">(</span>1 &minus; <span class="frac"><span>1</span><span>(1+<i>r</i>)<sup><i>T</i></sup></span></span><span class="p">)</span></div>
+        <ul class="vars" data-out-html="vars1"></ul>
+        <h4>With the numbers filled in:</h4>
+        <div class="formula" data-out-html="filled1"></div>
+        <ol data-out-html="math1"></ol>
+      </div>
+    </details>
+  </section>
+
+  <!-- STEP TWO -->
+  <section id="step-two" class="step-head step-box">
+    <h2><span class="step-n">Step Two:</span> Plan how to get there</h2>
+    <p>Now that you have your retirement target, you can figure out an annual amount to save and invest each year to reach it. A few questions shape the answer:</p>
+  </section>
+
+  <section class="q" id="q-years">
+    <h3>How many years do you have until retirement?</h3>
+    <p>The further away retirement is, the less you have to save each year due to <a href="#">compound growth</a>, where you earn a return on both your contributions and your past earnings.</p>
+    <p><a href="#">Waiting to save</a> means you will have to save more each year to reach the same target.</p>
+
+    <div class="answer reveal" data-card="years" data-keys="currentAge,saved,retireAge">
+      <p class="sentence">I&rsquo;m <label class="field"><input data-bind="currentAge" data-type="int" inputmode="numeric" aria-label="Current age"></label> now and want to retire at <label class="field"><input data-bind="retireAge" data-type="int" inputmode="numeric" aria-label="Retirement age"></label>. I&rsquo;ve saved <label class="field">$<input data-bind="saved" data-type="money" inputmode="numeric" aria-label="Current retirement savings"></label> so far.</p>
+      <div class="echo" aria-live="polite">
+        <span>You have <b class="num" data-out="N"></b> to save</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="q-work">
+    <h3>How much do you expect your investments to grow while you work?</h3>
+    <p>While saving for retirement, people often hold a larger share of higher-risk investments, like stocks. Historically, U.S. stocks have grown around <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html" target="_blank" rel="noopener">10%</a> a year, before inflation, making 6% to 8% after inflation a common assumption for retirement savings invested mostly in stocks.</p>
+    <p>Your return depends on what you invest in (stocks, bonds, cash), how you diversify risk and what you pay in fees:</p>
+    <ul class="bullets">
+      <li><a href="#">Diversifying</a>, spreading your money across many investments, means one poor performer is less likely to derail your plan.</li>
+      <li><a href="#">Fees</a> add up over time and eat into your returns.</li>
+    </ul>
+
+    <div class="answer reveal" data-card="workReturn" data-keys="workReturn">
+      <p class="sentence">While I work, I expect <label class="field"><input data-bind="workReturn" data-type="pct" inputmode="decimal" aria-label="Expected return before retirement, percent">%</label> growth a year, before inflation.</p>
+      <div class="echo" aria-live="polite">
+        <span><span data-out="workReturnTxt"></span> &minus; <span data-out="inflTxt"></span> inflation from step one = <b class="num" data-out="realWorkTxt"></b></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="q-match">
+    <h3>Does your employer put money into your retirement account?</h3>
+    <p>In many jobs, your employer will add money to your retirement account, but often only if you put in some of your own. This is called an <a href="#">employer match</a>.</p>
+    <p>For example, say your employer matches 100% of what you put in, up to 5% of your pay. If you contribute 5%, your employer adds another 5%. Some employers also add a set percentage of your pay automatically, whether you put in money or not.</p>
+    <p>Your yearly savings amount stays the same. The match simply reduces how much you need to contribute yourself.</p>
+    <p>Workplace retirement accounts go by different names, such as 401(k), 403(b), 457(b) or Thrift Savings Plan.</p>
+
+    <div class="answer reveal" data-card="match" data-keys="hasMatch,hasAuto,salary,matchPct,matchCap,hasTier2,tier2Pct,tier2Cap,autoPct">
+      <p class="group-label" id="employer-q">What does your employer put in? <span class="hint">Choose any that apply.</span></p>
+      <div class="chips" role="group" aria-labelledby="employer-q">
+        <button class="chip" id="no-employer" aria-pressed="false">Nothing</button>
+        <button class="chip" data-kind="hasMatch" aria-pressed="false">A match on what I put in</button>
+        <button class="chip" data-kind="hasAuto" aria-pressed="false">A set % of my pay</button>
+      </div>
+
+      <div class="emp-detail sub" id="emp-detail" hidden>
+      <p class="sentence sub" id="salary-sub" hidden>I earn <label class="field">$<input data-bind="salary" data-type="money" inputmode="numeric" aria-label="Yearly pay"></label> a year.</p>
+
+      <div class="sub match-block" id="match-sub" hidden>
+        <p class="sentence">My employer matches <label class="field"><input data-bind="matchPct" data-type="pct" inputmode="decimal" aria-label="Match rate, percent">%</label> of what I put in, up to <label class="field"><input data-bind="matchCap" data-type="pct" inputmode="decimal" aria-label="Match limit, percent of pay">%</label> of my pay<span id="tier2-line" hidden>, then <label class="field"><input data-bind="tier2Pct" data-type="pct" inputmode="decimal" aria-label="Second level match rate, percent">%</label> of what I put in on the next <label class="field"><input data-bind="tier2Cap" data-type="pct" inputmode="decimal" aria-label="Second level width, percent of pay">%</label></span>.</p>
+        <div class="presets" role="group" aria-labelledby="plan-q">
+          <span class="presets-label" id="plan-q">Common setups:</span>
+          <button class="preset" data-plan="100,6" aria-pressed="false">100% up to 6%</button>
+          <button class="preset" data-plan="50,6" aria-pressed="false">50% up to 6%</button>
+          <button class="preset" data-plan="100,4" aria-pressed="false">100% up to 4%</button>
+          <button class="preset" data-plan="100,3,50,2" aria-pressed="false">100% of 3%, then 50% of 2%</button>
+          <button class="preset preset-add" id="tier2-toggle" aria-expanded="false" aria-controls="tier2-line"><span>+ Add a second level</span></button>
+        </div>
+      </div>
+
+      <p class="sentence sub" id="auto-sub" hidden>My employer <span data-out="autoAlso"></span>adds <label class="field"><input data-bind="autoPct" data-type="pct" inputmode="decimal" aria-label="Automatic contribution, percent of pay">%</label> of my pay automatically, whether I put in money or not.</p>
+
+      <div class="echo" id="match-echo" aria-live="polite">
+        <span data-out-html="matchLine"></span>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="q" id="savings">
+    <div class="card-b" aria-live="polite">
+      <div class="recap card-b-recap">
+        <div class="recap-head"><h3>Putting it all together</h3></div>
+        <div class="calc">
+          <div class="calc-row"><span class="calc-label">Target from Step One</span><span class="calc-val"><b class="num" data-out="targetTxt"></b> <a href="#target">Edit</a></span></div>
+<div class="calc-row"><label for="c2-ytr">Years until retirement</label><div class="stepper"><button type="button" data-step="yearsToRetire" data-by="-1" aria-label="Fewer years until retirement">&minus;</button><span class="stepper-field"><input id="c2-ytr" inputmode="numeric"><span class="unit">yrs</span></span><button type="button" data-step="yearsToRetire" data-by="1" aria-label="More years until retirement">+</button></div></div>
+          <div class="calc-row"><label for="c2-saved">Saved so far</label><div class="stepper"><button type="button" data-step="saved" data-by="-5000" aria-label="Decrease savings so far">&minus;</button><span class="stepper-field"><span class="unit">$</span><input id="c2-saved" data-bind="saved" data-type="money" inputmode="numeric"></span><button type="button" data-step="saved" data-by="5000" aria-label="Increase savings so far">+</button></div></div>
+          <div class="calc-row"><label for="c2-work">Return while working</label><div class="stepper"><button type="button" data-step="workReturn" data-by="-0.5" aria-label="Lower return while working">&minus;</button><span class="stepper-field"><input id="c2-work" data-bind="workReturn" data-type="pct" inputmode="decimal"><span class="unit">%</span></span><button type="button" data-step="workReturn" data-by="0.5" aria-label="Higher return while working">+</button></div></div>
+          <div class="calc-row"><label for="c2-infl">Inflation</label><div class="stepper"><button type="button" data-step="inflation" data-by="-0.5" aria-label="Lower inflation">&minus;</button><span class="stepper-field"><input id="c2-infl" data-bind="inflation" data-type="pct" inputmode="decimal"><span class="unit">%</span></span><button type="button" data-step="inflation" data-by="0.5" aria-label="Higher inflation">+</button></div></div>
+          <details class="calc-acc">
+            <summary><span class="calc-label">Employer contributions</span><span class="calc-val"><b class="num" data-out="empRow"></b><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+            <div class="calc-acc-body">
+              <div class="chips" role="group" aria-label="What your employer puts in">
+                <button type="button" class="chip" data-kind="hasMatch" aria-pressed="false">A match on what I put in</button>
+                <button type="button" class="chip" data-kind="hasAuto" aria-pressed="false">A set % of my pay</button>
+              </div>
+              <div class="calc-row acc-salary" hidden><label for="c2-salary">Yearly pay</label><div class="stepper"><button type="button" data-step="salary" data-by="-5000" aria-label="Decrease yearly pay">&minus;</button><span class="stepper-field"><span class="unit">$</span><input id="c2-salary" data-bind="salary" data-type="money" inputmode="numeric"></span><button type="button" data-step="salary" data-by="5000" aria-label="Increase yearly pay">+</button></div></div>
+              <div class="calc-row acc-match" hidden><label for="c2-mpct">Match rate</label><div class="stepper"><button type="button" data-step="matchPct" data-by="-25" aria-label="Lower match rate">&minus;</button><span class="stepper-field"><input id="c2-mpct" data-bind="matchPct" data-type="pct" inputmode="decimal"><span class="unit">%</span></span><button type="button" data-step="matchPct" data-by="25" aria-label="Higher match rate">+</button></div></div>
+              <div class="calc-row acc-match" hidden><label for="c2-mcap">Matched up to</label><div class="stepper"><button type="button" data-step="matchCap" data-by="-1" aria-label="Lower match limit">&minus;</button><span class="stepper-field"><input id="c2-mcap" data-bind="matchCap" data-type="pct" inputmode="decimal"><span class="unit">% of pay</span></span><button type="button" data-step="matchCap" data-by="1" aria-label="Higher match limit">+</button></div></div>
+              <div class="calc-row acc-tier2" hidden><label for="c2-t2pct">Then matches</label><div class="stepper"><button type="button" data-step="tier2Pct" data-by="-25" aria-label="Lower second match rate">&minus;</button><span class="stepper-field"><input id="c2-t2pct" data-bind="tier2Pct" data-type="pct" inputmode="decimal"><span class="unit">%</span></span><button type="button" data-step="tier2Pct" data-by="25" aria-label="Higher second match rate">+</button></div></div>
+              <div class="calc-row acc-tier2" hidden><label for="c2-t2cap">Of the next</label><div class="stepper"><button type="button" data-step="tier2Cap" data-by="-1" aria-label="Lower second match limit">&minus;</button><span class="stepper-field"><input id="c2-t2cap" data-bind="tier2Cap" data-type="pct" inputmode="decimal"><span class="unit">% of pay</span></span><button type="button" data-step="tier2Cap" data-by="1" aria-label="Higher second match limit">+</button></div></div>
+              <div class="presets acc-presets acc-match" role="group" aria-labelledby="acc-plan-q" hidden>
+                <span class="presets-label" id="acc-plan-q">Common setups:</span>
+                <button type="button" class="preset" data-plan="100,6" aria-pressed="false">100% up to 6%</button>
+                <button type="button" class="preset" data-plan="50,6" aria-pressed="false">50% up to 6%</button>
+                <button type="button" class="preset" data-plan="100,4" aria-pressed="false">100% up to 4%</button>
+                <button type="button" class="preset" data-plan="100,3,50,2" aria-pressed="false">100% of 3%, then 50% of 2%</button>
+              </div>
+              <div class="calc-row acc-auto" hidden><label for="c2-auto">Automatic contribution</label><div class="stepper"><button type="button" data-step="autoPct" data-by="-1" aria-label="Lower automatic contribution">&minus;</button><span class="stepper-field"><input id="c2-auto" data-bind="autoPct" data-type="pct" inputmode="decimal"><span class="unit">% of pay</span></span><button type="button" data-step="autoPct" data-by="1" aria-label="Higher automatic contribution">+</button></div></div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div class="card-b-top">
+        <span class="eyebrow">Annual savings</span>
+        <div class="big"><span data-tween="annual"></span> <small>a year</small></div>
+        <p data-out-html="annualLine"></p>
+      </div>
+      <div class="card-b-compare" data-needs-match>
+        <span class="eyebrow">Where your savings come from</span>
+        <div class="split" data-out-html="splitHtml"></div>
+      </div>
+
+      <div class="chart-card card-b-section">
+        <div class="legend" id="chart-legend"></div>
+        <svg id="chart" viewBox="0 0 600 240" role="img" aria-label="Savings growth chart"></svg>
+        <p class="chart-note" data-out-html="chartNote"></p>
+        <details class="future">
+          <summary>In future dollars <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="future-body" id="future-body"></div>
+        </details>
+      </div>
+
+      <div class="scen card-b-section card-b-scen">
+        <span class="eyebrow">Try a scenario</span>
+        <div class="chips">
+          <button class="chip" data-scen="sooner">Start saving 5 years sooner</button>
+          <button class="chip" data-scen="later">Start saving 5 years later</button>
+          <button class="chip" data-scen="less">Spend $10,000 less a year in retirement</button>
+          <button class="chip" data-scen="reset">Reset to example</button>
+        </div>
+      </div>
+    </div>
+
+    <details class="math">
+      <summary>The math behind this answer: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="math-body">
+        <div class="formula" aria-label="FV equals C over r, times 1 plus r to the power T, minus 1"><i>FV</i> = <span class="frac"><i>C</i><i>r</i></span><span class="p">(</span>(1+<i>r</i>)<sup><i>T</i></sup> &minus; 1<span class="p">)</span></div>
+        <ul class="vars" data-out-html="vars2"></ul>
+        <h4>With the numbers filled in:</h4>
+        <div class="formula" data-out-html="filled2"></div>
+        <ol data-out-html="math2"></ol>
+      </div>
+    </details>
+  </section>
+
+  <p>Once you have your yearly savings amount, you can turn it into a plan. Learn how to <a href="#">make a budget</a> to help you reach your retirement goal.</p>
+
+  <aside class="concepts">
+    <h3>Core financial concepts this page builds on</h3>
+    <ul><li><a href="#">Compound growth</a></li><li><a href="#">Inflation</a></li><li><a href="#">Portfolio allocation</a></li></ul>
+  </aside>
+  <a class="next" href="#">
+    <span class="eyebrow">Next in this topic</span>
+    <h3>Risks in retirement planning &rarr;</h3>
+    <p>Your plan rests on estimates. What happens when returns, inflation or how long you live turn out differently, and how to adjust.</p>
+  </a>
+</article>
+
+</div>
+
+
+<script>
+document.documentElement.classList.add('js');
+
+const DEFAULTS = { monthly: 5000, other: 0, retireAge: 60, years: 30, retReturn: 4, inflation: 2, currentAge: 25, saved: 0, workReturn: 9, hasMatch: false, hasAuto: false, salary: 50000, matchPct: 100, matchCap: 5, hasTier2: false, tier2Pct: 50, tier2Cap: 2, autoPct: 3 };
+  let noEmployer = false;
+  let otherManualOpen = false;
+  document.addEventListener('click', e => {
+    const tip = e.target.closest('.tip-btn');
+    document.querySelectorAll('.tip-btn[aria-expanded="true"]').forEach(b => { if (b !== tip) b.setAttribute('aria-expanded', 'false'); });
+    if (tip) tip.setAttribute('aria-expanded', String(tip.getAttribute('aria-expanded') !== 'true'));
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.tip-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false')); });
+const EMPLOYEE_LIMIT = 24500;
+const LIMIT_YEAR = 2026;
+let s = { ...DEFAULTS };
+const touched = new Set();
+
+const $ = (q, el = document) => el.querySelector(q);
+const $$ = (q, el = document) => [...el.querySelectorAll(q)];
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+const short = n => n >= 1e6 ? '$' + (n / 1e6).toFixed(2) + 'M' : n >= 1e3 ? '$' + Math.round(n / 1e3) + 'k' : money(n);
+const pct = n => (Math.round(n * 100) / 100) + '%';
+const dec = (n, d = 6) => Number(n.toFixed(d)).toLocaleString('en-US', { maximumFractionDigits: d });
+const yrs = n => n + (n === 1 ? ' year' : ' years');
+
+function pv(C, r, T) { return r === 0 ? C * T : C / r * (1 - Math.pow(1 + r, -T)); }
+function pmt(P, r, T) { return r === 0 ? P / T : P * r / (1 - Math.pow(1 + r, -T)); }
+function savingsNeeded(target, S, r, N) {
+  const grown = S * Math.pow(1 + r, N);
+  const rem = Math.max(0, target - grown);
+  return r === 0 ? rem / N : rem * r / (Math.pow(1 + r, N) - 1);
+}
+
+function compute() {
+  const yearlyNeed = Math.max(0, s.monthly - s.other) * 12;
+  const T = Math.max(1, s.years);
+  const rRet = (s.retReturn - s.inflation) / 100;
+  const target = pv(yearlyNeed, rRet, T);
+  const N = Math.max(1, s.retireAge - s.currentAge);
+  const rWork = (s.workReturn - s.inflation) / 100;
+  const annual = savingsNeeded(target, s.saved, rWork, N);
+  const split = employerSplit(annual);
+  return { yearlyNeed, T, rRet, target, N, rWork, annual, ...split, employer: split.match + split.auto };
+}
+
+function matchTiers() {
+  if (!s.hasMatch) return [];
+  const tiers = [{ rate: s.matchPct / 100, upto: s.matchCap / 100 }];
+  if (s.hasTier2) tiers.push({ rate: s.tier2Pct / 100, upto: s.tier2Cap / 100 });
+  return tiers.filter(t => t.upto > 0);
+}
+
+function employerSplit(target) {
+  const pay = s.salary;
+  const autoFull = s.hasAuto ? pay * s.autoPct / 100 : 0;
+  const tiers = matchTiers();
+  const fullMatchYou = tiers.reduce((sum, t) => sum + t.upto * pay, 0);
+  const fullMatch = tiers.reduce((sum, t) => sum + t.upto * pay * t.rate, 0);
+  const base = { autoFull, fullMatchYou, fullMatch, fullMatchPct: tiers.reduce((sum, t) => sum + t.upto * 100, 0) };
+  let need = target - autoFull;
+  if (need <= 0) return { ...base, you: 0, match: 0, auto: target, autoCovers: true };
+  let you = 0, match = 0;
+  for (const t of tiers) {
+    const band = t.upto * pay;
+    const full = band * (1 + t.rate);
+    if (need <= full) {
+      const x = need / (1 + t.rate);
+      return { ...base, you: you + x, match: match + x * t.rate, auto: autoFull, autoCovers: false };
+    }
+    you += band; match += band * t.rate; need -= full;
+  }
+  return { ...base, you: you + need, match, auto: autoFull, autoCovers: false };
+}
+
+function format(key) {
+  const v = s[key];
+  const type = $(`[data-bind="${key}"]`).dataset.type;
+  return type === 'money' ? Math.round(v).toLocaleString('en-US') : String(Math.round(v * 100) / 100);
+}
+function sizeInput(input) { input.style.width = Math.max(2, input.value.length + 0.6) + 'ch'; }
+
+const tweens = {};
+function tween(el, to) {
+  const key = el.dataset.tween;
+  const from = tweens[key] ?? to;
+  tweens[key] = to;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || from === to) { el.textContent = money(to); return; }
+  const start = performance.now(), dur = 450;
+  cancelAnimationFrame(el._raf);
+  const step = now => {
+    const t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
+    el.textContent = money(from + (to - from) * e);
+    if (t < 1) el._raf = requestAnimationFrame(step);
+  };
+  el._raf = requestAnimationFrame(step);
+}
+
+function render() {
+  const c = compute();
+  const realRet = s.retReturn - s.inflation, realWork = s.workReturn - s.inflation;
+
+  let compare = '', shortLine = '', nominalTxt = '', nominalPct = 100;
+  if (s.inflation > 0) {
+    const nominal = pv(c.yearlyNeed, s.retReturn / 100, c.T);
+    const supports = pmt(nominal, c.rRet, c.T);
+    nominalTxt = money(nominal);
+    nominalPct = c.target > 0 ? Math.min(100, nominal / c.target * 100) : 100;
+    shortLine = `Ignoring inflation, you&rsquo;d save about <b class="num">${money(Math.abs(c.target - nominal))}</b> ${c.target >= nominal ? 'less' : 'more'}. In today&rsquo;s dollars, that would only support about <b class="num">${money(supports)}</b> a year${c.target > nominal ? `, short of your ${money(c.yearlyNeed)} goal` : ''}.`;
+    compare = `If you <b>ignored inflation</b> and used ${pct(s.retReturn)}, your target would be ${money(nominal)} (about ${money(c.target - nominal).replace('-', '')} ${c.target >= nominal ? 'less' : 'more'}). In today&rsquo;s dollars, that would only support about ${money(supports)} a year${c.target > nominal ? `, falling short of your ${money(c.yearlyNeed)} goal` : ''}.`;
+  }
+
+  const r = c.rRet, a = Math.pow(1 + r, c.T);
+  const math1 = r === 0
+    ? `<li>With 0% growth after inflation, PV = C &times; T</li><li>${money(c.yearlyNeed)} &times; ${c.T} = <b>${money(c.target)}</b></li>`
+    : `<li>${money(c.yearlyNeed).slice(1)} &divide; ${dec(r, 4)} = ${dec(c.yearlyNeed / r, 2)}</li>
+       <li>(${dec(1 + r, 4)})<sup>${c.T}</sup> = ${dec(a)}, and 1 &divide; ${dec(a)} = ${dec(1 / a)}</li>
+       <li>1 &minus; ${dec(1 / a)} = ${dec(1 - 1 / a)}</li>
+       <li>${dec(c.yearlyNeed / r, 2)} &times; ${dec(1 - 1 / a)} = <b>${money(c.target)}</b></li>`;
+
+  const rw = c.rWork, b = Math.pow(1 + rw, c.N), grown = s.saved * b, rem = Math.max(0, c.target - grown);
+  let math2 = rw === 0
+    ? `<li>With 0% growth after inflation, C = (FV &minus; Savings) &divide; T</li><li>(${money(c.target)} &minus; ${money(s.saved)}) &divide; ${c.N} = <b>${money(c.annual)}</b></li>`
+    : `<li>(${dec(1 + rw, 4)})<sup>${c.N}</sup> = ${dec(b)}, and ${dec(b)} &minus; 1 = ${dec(b - 1)}</li>` +
+      (s.saved > 0 ? `<li>Your ${money(s.saved)} already saved grows to ${money(grown)}, leaving ${money(rem)} to cover</li>` : '') +
+      `<li>${money(rem).slice(1)} &times; ${dec(rw, 4)} = ${dec(rem * rw, 2)}</li>
+       <li>${dec(rem * rw, 2)} &divide; ${dec(b - 1)} = <b>${money(c.annual)}</b></li>`;
+
+  const n0 = v => Math.round(v).toLocaleString('en-US');
+  const r4 = v => dec(v, 4);
+  const vars1 = `<li><i>PV</i> = the retirement number (what we&rsquo;re solving for)</li>
+    <li><i>C</i> = ${n0(c.yearlyNeed)} (yearly retirement spending)</li>
+    <li><i>r</i> = ${r4(c.rRet)} (a ${pct(realRet)} return after inflation)</li>
+    <li><i>T</i> = ${c.T} (years of retirement)</li>`;
+  const Y = v => `<span class="yours">${v}</span>`;
+  const filled1 = r === 0 ? `<i>PV</i> = ${n0(c.yearlyNeed)} &times; ${c.T}` : `<i>PV</i> = <span class="frac"><span>${n0(c.yearlyNeed)}</span><span>${r4(c.rRet)}</span></span><span class="p">(</span>1 &minus; <span class="frac"><span>1</span><span>(${r4(1 + c.rRet)})<sup>${c.T}</sup></span></span><span class="p">)</span>`;
+  const vars2 = rw === 0
+    ? `<li><i>FV</i> = ${n0(c.target)} (the retirement number from Step One)</li>
+    <li><i>Savings</i> = ${n0(s.saved)} (what you&rsquo;ve already saved)</li>
+    <li><i>C</i> = the yearly savings (what we&rsquo;re solving for)</li>
+    <li><i>r</i> = 0 (a 0% return after inflation)</li>
+    <li><i>T</i> = ${c.N} (years until retirement)</li>`
+    : `<li><i>FV</i> = ${n0(rem)} (${s.saved > 0 ? 'your target, minus what your current savings will grow to' : 'the retirement number from Step One'})</li>
+    <li><i>C</i> = the yearly savings (what we&rsquo;re solving for)</li>
+    <li><i>r</i> = ${r4(c.rWork)} (a ${pct(realWork)} return after inflation)</li>
+    <li><i>T</i> = ${c.N} (years until retirement)</li>`;
+  const filled2 = rw === 0 ? `<i>C</i> = <span class="frac"><span>${n0(c.target)} &minus; ${n0(s.saved)}</span><span>${c.N}</span></span>` : `${n0(rem)} = <span class="frac"><i>C</i><span>${r4(c.rWork)}</span></span><span class="p">(</span>(${r4(1 + c.rWork)})<sup>${c.N}</sup> &minus; 1<span class="p">)</span>`;
+
+  const anyEmployer = s.hasMatch || s.hasAuto;
+  const payPct = v => s.salary > 0 ? pct(Math.round(v / s.salary * 1000) / 10) : '';
+  let matchLine = '';
+  if (!anyEmployer) {
+    matchLine = '';
+  } else {
+    const total = c.match + c.auto;
+    const split = s.hasMatch && s.hasAuto ? ` <span class="echo-split">(${money(c.match)} match + ${money(c.auto)} automatic)</span>` : '';
+    matchLine = `<span class="echo-label">Your employer puts in</span> <b class="num echo-amt">${money(total)}</b> <span class="echo-label">a year</span>${split}`;
+  }
+  if (anyEmployer && c.you > EMPLOYEE_LIMIT) {
+    matchLine += ` <span class="tip">That&rsquo;s above the ${money(EMPLOYEE_LIMIT)} yearly limit on your own workplace contributions (${LIMIT_YEAR}), so the extra ${money(c.you - EMPLOYEE_LIMIT)} could go in an IRA or a regular investment account.</span>`;
+  }
+
+  document.getElementById('match-echo').hidden = !matchLine;
+
+  const answered = $$('[data-card]').filter(el => el.classList.contains('mine')).length;
+  const totalCards = $$('[data-card]').length;
+
+  const out = {
+    yearlyNeed: money(c.yearlyNeed),
+    yearlySpend: money(s.monthly * 12),
+    needEcho: c.yearlyNeed === 0
+      ? `Your other income covers all of your expected spending, so you won&rsquo;t need savings to cover it.`
+      : `Your savings need to cover <b class="num">${money(c.yearlyNeed)}</b> a year`,
+    T: yrs(c.T),
+    N: yrs(c.N),
+    retReturnTxt: pct(s.retReturn), workReturnTxt: pct(s.workReturn), inflTxt: pct(s.inflation),
+    realRetTxt: pct(realRet), realWorkTxt: pct(realWork),
+    targetTxt: money(c.target), targetShort: short(c.target), annualTxt: money(c.annual),
+    employerTxt: money(c.employer),
+    empRow: !anyEmployer ? 'None' : c.annual === 0 ? '$0 a year' : `${money(c.employer)} a year`,
+    targetLine: c.target === 0
+      ? `Your other income covers your expected spending, so you don&rsquo;t need savings to cover it. Savings can still help with costs that are hard to predict, like health care or home repairs.`
+      : `With this saved in today&rsquo;s dollars on the day you retire, you can spend what ${money(c.yearlyNeed)} buys today every year for ${yrs(c.T)}, until your savings run out.`,
+    compareLine: compare, shortLine, nominalTxt,
+    mC: money(c.yearlyNeed), mR: dec(c.rRet, 4), mT: c.T, mR2: dec(c.rWork, 4), mN: c.N,
+    math1, math2, matchLine, vars1, filled1, vars2, filled2,
+    annualLine: c.annual === 0 && c.target === 0
+      ? `Since your other income covers your expected spending, you don&rsquo;t need to save to reach a target. Anything you save adds a cushion for surprises.`
+      : c.annual === 0
+      ? `What you&rsquo;ve already saved, ${money(s.saved)}, is on track to grow to about ${money(grown)} in today&rsquo;s dollars by age ${s.retireAge}, which covers your ${money(c.target)} target. Keep it invested, and anything more you save adds a cushion.`
+      : `This is in today&rsquo;s dollars. In practice, you would save <b>${money(c.annual)} in your first year</b>, then raise the amount by ${pct(s.inflation)} each year to keep up with inflation, so every year you are setting aside the equivalent of ${money(c.annual)} of today&rsquo;s spending.`,
+    splitHtml: anyEmployer
+      ? `<div><span>You put in</span><b class="num">${money(c.you)}</b></div>` +
+        (s.hasMatch ? `<div><span>Employer match</span><b class="num">${money(c.match)}</b></div>` : '') +
+        (s.hasAuto ? `<div><span>Automatic</span><b class="num">${money(c.auto)}</b></div>` : '')
+      : '',
+    autoAlso: s.hasMatch ? 'also ' : '',
+    progTxt: `${answered} of ${totalCards} answers yours`,
+  };
+
+  $$('[data-out]').forEach(el => { const v = out[el.dataset.out]; if (v !== undefined) el.innerHTML = v; });
+  $$('[data-out-html]').forEach(el => { el.innerHTML = out[el.dataset.outHtml]; });
+  $$('[data-needs-compare]').forEach(el => el.hidden = !compare);
+
+  $$('[data-needs-match]').forEach(el => el.hidden = !anyEmployer || c.annual === 0);
+  $$('[data-needs-compare]').forEach(el => { if (c.target === 0) el.hidden = true; });
+  $$('[data-tween]').forEach(el => tween(el, c[el.dataset.tween]));
+  $$('[data-prog]').forEach(el => el.style.width = (answered / totalCards * 100) + '%');
+
+  $$('[data-bind]').forEach(input => {
+  if (document.activeElement !== input) input.value = format(input.dataset.bind);
+  sizeInput(input);
+  });
+  const ytr = $('#c2-ytr');
+  if (document.activeElement !== ytr) ytr.value = String(s.retireAge - s.currentAge);
+  sizeInput(ytr);
+  const c1r = $('#c1-retire'), c1l = $('#c1-liveto');
+  if (document.activeElement !== c1r) c1r.value = String(s.retireAge);
+  if (document.activeElement !== c1l) c1l.value = String(s.retireAge + s.years);
+  sizeInput(c1r); sizeInput(c1l);
+  $$('.acc-salary').forEach(el => el.hidden = !anyEmployer);
+  $$('.acc-match').forEach(el => el.hidden = !s.hasMatch);
+  $$('.acc-auto').forEach(el => el.hidden = !s.hasAuto);
+  $$('.acc-tier2').forEach(el => el.hidden = !(s.hasMatch && s.hasTier2));
+  $$('[data-chips]').forEach(group => {
+    const key = group.dataset.chips;
+    const cur = key === 'span' ? c.T : s[key];
+    $$('.chip', group).forEach(ch => ch.setAttribute('aria-pressed', String(Number(ch.dataset.val) === cur)));
+  });
+  $$('[data-kind]').forEach(btn => btn.setAttribute('aria-pressed', String(s[btn.dataset.kind])));
+  $$('[data-plan]').forEach(btn => {
+    const [p1, c1, p2, c2] = btn.dataset.plan.split(',').map(Number);
+    const on = s.matchPct === p1 && s.matchCap === c1 && (p2 === undefined ? !s.hasTier2 : s.hasTier2 && s.tier2Pct === p2 && s.tier2Cap === c2);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  const none = $('#no-employer');
+  none.hidden = anyEmployer;
+  none.setAttribute('aria-pressed', String(!anyEmployer && noEmployer));
+  $('#emp-detail').hidden = !anyEmployer;
+  $('#salary-sub').hidden = !anyEmployer;
+  $('#match-sub').hidden = !s.hasMatch;
+  $('#auto-sub').hidden = !s.hasAuto;
+  $('#tier2-line').hidden = !s.hasTier2;
+  const otherOpen = s.other > 0 || otherManualOpen;
+  $('#other-toggle').setAttribute('aria-expanded', String(otherOpen)); $('#other-sub').hidden = !otherOpen;
+  const t2 = $('#tier2-toggle');
+  t2.setAttribute('aria-expanded', String(s.hasTier2));
+  $('span', t2).textContent = s.hasTier2 ? 'Remove second level' : '+ Add a second level';
+
+  drawChart(c);
+}
+
+function markTouched(keys) {
+  keys.forEach(k => touched.add(k));
+  $$('[data-card]').forEach(card => {
+    const mine = card.dataset.keys.split(',').some(k => touched.has(k));
+    card.classList.toggle('mine', mine);
+  });
+}
+
+function drawChart(c) {
+  const svg = $('#chart');
+  const W = 600, H = 240, L = 48, R = 12, Tp = 12, B = 30;
+  const pts = [];
+  let bal = s.saved;
+  const emp = (s.hasMatch || s.hasAuto) ? c.match + c.auto : 0;
+  const youYear = c.annual - emp;
+  for (let t = 0; t <= c.N; t++) {
+    if (t > 0) bal = bal * (1 + c.rWork) + c.annual;
+    pts.push({ t, bal, put: s.saved + c.annual * t, you: s.saved + youYear * t });
+  }
+  const max = Math.max(1, ...pts.map(p => p.bal), ...pts.map(p => p.put));
+  const x = t => L + (t / c.N) * (W - L - R);
+  const y = v => Tp + (1 - v / max) * (H - Tp - B);
+  const area = key => `M${x(0)},${y(0)} ` + pts.map(p => `L${x(p.t).toFixed(1)},${y(p[key]).toFixed(1)}`).join(' ') + ` L${x(c.N)},${y(0)} Z`;
+  const ticks = [0, max / 2, max].map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${short(v)}</text>`).join('');
+  const xt = [0, Math.round(c.N / 2), c.N].map((t, i) => `<text x="${x(t)}" y="${H - 8}" text-anchor="${i === 0 ? 'start' : i === 2 ? 'end' : 'middle'}">${i === 0 ? 'Age ' + s.currentAge : i === 2 ? 'Retire at ' + s.retireAge : 'Age ' + (s.currentAge + t)}</text>`).join('');
+  const last = pts[pts.length - 1];
+  const empLayer = emp > 0 ? `<path d="${area('put')}" fill="var(--leaf)"/>` : '';
+  const youKey = emp > 0 ? 'you' : 'put';
+  svg.innerHTML = `${ticks}<path d="${area('bal')}" fill="var(--green)"/>${empLayer}<path d="${area(youKey)}" fill="var(--sky)"/>${xt}<circle cx="${x(c.N)}" cy="${y(last.bal)}" r="5" fill="var(--green)" stroke="var(--paper)" stroke-width="2"/>`;
+  const key = (color, label, val) => `<span><i style="background: var(${color})"></i>${label} <b class="num">${money(val)}</b></span>`;
+  $('#chart-legend').innerHTML = (emp > 0
+    ? key('--sky', 'You put in', last.you) + key('--leaf', 'Your employer puts in', last.put - last.you)
+    : key('--sky', 'What you put in', last.put)) + key('--green', 'Growth', Math.max(0, last.bal - last.put));
+
+  const infl = s.inflation / 100;
+  const grow = k => Math.pow(1 + infl, k);
+  const yearsShown = [...new Set([1, 10, 20, 30, c.N].filter(k => k <= c.N))];
+  const rows = yearsShown.map(k => `<tr><td>Year ${k}${k === c.N && k !== 1 ? ' (last)' : ''}</td><td>${money(c.annual * grow(k - 1))}</td></tr>`).join('');
+  const nominalIn = infl === 0 ? c.annual * c.N : c.annual * (grow(c.N) - 1) / infl;
+  const nominalBal = last.bal * grow(c.N);
+  const about = v => money(Math.round(v / 1000) * 1000);
+  $('#future-body').innerHTML = c.annual === 0
+    ? `<p>You don&rsquo;t need to add yearly savings, so there&rsquo;s nothing to adjust for inflation.</p>`
+    : infl === 0
+    ? `<p>With 0% inflation, today&rsquo;s dollars and future dollars are the same, so you&rsquo;d save ${money(c.annual)} every year.</p>`
+    : `<p>Prices rise, so to keep saving the same ${money(c.annual)} in today&rsquo;s money, the amount you set aside grows ${pct(s.inflation)} a year:</p>
+      <table class="future-table"><thead><tr><th scope="col">Year</th><th scope="col">Save that year</th></tr></thead><tbody>${rows}</tbody></table>
+      <p>Over ${yrs(c.N)} you would put in about <b class="num">${about(nominalIn)}</b>, and have about <b class="num">${about(nominalBal)}</b> on the day you retire. That buys what ${money(last.bal)} buys today, assuming ${pct(s.inflation)} inflation.</p>`;
+  $('[data-out-html="chartNote"]').innerHTML = c.annual === 0
+    ? (s.saved > 0
+      ? `In today&rsquo;s dollars, your ${money(s.saved)} grows to <b>${money(last.bal)}</b> by the day you retire, without adding more.`
+      : `With a $0 target, there&rsquo;s nothing you need to save toward.`)
+    : `In today&rsquo;s dollars, saving ${money(c.annual)} a year for ${yrs(c.N)} reaches <b>${money(Math.max(last.bal, c.target))}</b> by the day you retire.`;
+}
+
+$$('[data-bind]').forEach(input => {
+  input.addEventListener('input', () => {
+    const key = input.dataset.bind, type = input.dataset.type;
+    const raw = input.value.replace(type === 'pct' ? /[^0-9.]/g : /[^0-9]/g, '');
+    let v = parseFloat(raw);
+    if (isNaN(v)) v = 0;
+    if (type === 'int') v = Math.min(120, v);
+    if (type === 'pct') v = Math.min(100, v);
+    s[key] = v;
+    if (type === 'money') {
+      const caret = input.selectionStart ?? input.value.length;
+      const digitsBeforeCaret = input.value.slice(0, caret).replace(/[^0-9]/g, '').length;
+      input.value = raw === '' ? '' : v.toLocaleString('en-US');
+      let pos = 0, seen = 0;
+      while (pos < input.value.length && seen < digitsBeforeCaret) { if (/[0-9]/.test(input.value[pos])) seen++; pos++; }
+      input.setSelectionRange(pos, pos);
+    }
+    markTouched([key]);
+    sizeInput(input);
+    render();
+  });
+  input.addEventListener('focus', () => input.select());
+  input.addEventListener('blur', () => {
+    if (s.currentAge >= s.retireAge) s.currentAge = Math.max(16, s.retireAge - 1);
+    if (s.years < 1) s.years = 1;
+    render();
+  });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.nativeEvent?.isComposing && e.keyCode !== 229) input.blur(); });
+});
+
+$$('[data-chips]').forEach(group => {
+  const key = group.dataset.chips;
+  group.addEventListener('click', e => {
+    const chip = e.target.closest('.chip'); if (!chip) return;
+    const v = Number(chip.dataset.val);
+    if (key === 'span') { s.years = v; markTouched(['years']); }
+    else { s[key] = v; markTouched([key]); }
+    render();
+  });
+});
+
+$('#other-toggle').addEventListener('click', e => {
+  const btn = e.currentTarget, open = btn.getAttribute('aria-expanded') !== 'true';
+  otherManualOpen = open;
+  btn.setAttribute('aria-expanded', String(open));
+  $('#other-sub').hidden = !open;
+  if (!open) { s.other = 0; render(); } else { $('[data-bind="other"]').focus(); $('[data-bind="other"]').select(); }
+});
+
+$$('[data-kind]').forEach(btn => btn.addEventListener('click', () => {
+  const key = btn.dataset.kind;
+  s[key] = !s[key];
+  if (s[key]) noEmployer = false;
+  markTouched([key]);
+  render();
+}));
+
+$('#no-employer').addEventListener('click', () => {
+  noEmployer = !noEmployer;
+  markTouched(['hasMatch']);
+  render();
+});
+
+$$('[data-plan]').forEach(btn => btn.addEventListener('click', () => {
+  const [p1, c1, p2, c2] = btn.dataset.plan.split(',').map(Number);
+  Object.assign(s, { matchPct: p1, matchCap: c1, hasTier2: p2 !== undefined });
+  if (p2 !== undefined) Object.assign(s, { tier2Pct: p2, tier2Cap: c2 });
+  markTouched(['matchPct']);
+  render();
+}));
+
+$('#tier2-toggle').addEventListener('click', () => {
+  s.hasTier2 = !s.hasTier2;
+  markTouched(['hasTier2']);
+  render();
+  if (s.hasTier2) { const el = $('[data-bind="tier2Pct"]'); el.focus(); el.select(); }
+});
+
+$$('[data-scen]').forEach(btn => btn.addEventListener('click', () => {
+  const k = btn.dataset.scen;
+  if (k === 'sooner') { s.currentAge = Math.max(16, s.currentAge - 5); markTouched(['currentAge']); }
+  if (k === 'later') { s.currentAge = Math.min(s.retireAge - 1, s.currentAge + 5); markTouched(['currentAge']); }
+  if (k === 'less') { s.monthly = Math.max(s.other, s.monthly - 10000 / 12); markTouched(['monthly']); }
+  if (k === 'reset') {
+    s = { ...DEFAULTS }; touched.clear(); markTouched([]);
+    $('#other-toggle').setAttribute('aria-expanded', 'false'); $('#other-sub').hidden = true;
+  }
+  render();
+}));
+
+function setYearsToRetire(n) {
+  s.retireAge = s.currentAge + Math.min(100 - s.currentAge, Math.max(1, Math.round(n)));
+  markTouched(['retireAge']);
+  render();
+}
+const ytrInput = $('#c2-ytr');
+ytrInput.addEventListener('focus', () => ytrInput.select());
+ytrInput.addEventListener('input', () => {
+  ytrInput.value = ytrInput.value.replace(/[^0-9]/g, '');
+  sizeInput(ytrInput);
+  const v = parseInt(ytrInput.value, 10);
+  if (!isNaN(v) && v >= 1) setYearsToRetire(v);
+});
+ytrInput.addEventListener('blur', () => render());
+ytrInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) ytrInput.blur(); });
+
+function wireAgeInput(el, apply) {
+  el.addEventListener('focus', () => el.select());
+  el.addEventListener('input', () => {
+    el.value = el.value.replace(/[^0-9]/g, '');
+    sizeInput(el);
+    const v = parseInt(el.value, 10);
+    if (!isNaN(v)) { apply(Math.min(120, v)); render(); }
+  });
+  el.addEventListener('blur', () => render());
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) el.blur(); });
+}
+let liveAnchor = s.retireAge + s.years;
+$('#c1-retire').addEventListener('focus', () => { liveAnchor = s.retireAge + s.years; });
+wireAgeInput($('#c1-retire'), v => {
+  s.retireAge = Math.max(s.currentAge + 1, v);
+  s.years = Math.max(1, liveAnchor - s.retireAge);
+  markTouched(['retireAge', 'years']);
+});
+wireAgeInput($('#c1-liveto'), v => {
+  if (v > s.retireAge) { s.years = v - s.retireAge; markTouched(['years']); }
+});
+
+const STEP_LIMITS = { matchPct: [0, 200], matchCap: [0, 100], autoPct: [0, 100], years: [1, 60], currentAge: [16, 99], retireAge: [17, 100], retReturn: [0, 20], workReturn: [0, 20], inflation: [0, 15] };
+$$('[data-step]').forEach(btn => btn.addEventListener('click', () => {
+  const key = btn.dataset.step;
+  if (key === 'yearsToRetire') { setYearsToRetire(s.retireAge - s.currentAge + Number(btn.dataset.by)); return; }
+  const [lo, hi] = STEP_LIMITS[key] ?? [0, Infinity];
+  s[key] = Math.min(hi, Math.max(lo, Math.round((s[key] + Number(btn.dataset.by)) * 100) / 100));
+  if (s.currentAge >= s.retireAge) {
+    if (key === 'currentAge') s.currentAge = s.retireAge - 1; else s.retireAge = s.currentAge + 1;
+  }
+  markTouched([key]);
+  render();
+}));
+
+const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: 0.15 });
+$$('.reveal').forEach(el => io.observe(el));
+
+render();
+</script>
+</body>
+</html>
